@@ -9,7 +9,7 @@ type Props = {
 const MainView: React.FC<Props> = ({ className = "", children }: Props) => {
   const styles = {
     wrapper: "z-0 mx-auto md:mt-[var(--header-height)]",
-    main: "z-0 flex min-h-screen w-full flex-1 flex-col bg-background md:rounded-lg",
+    main: "z-0 flex min-h-screen max-w-screen-xl flex-1 flex-col justify-center items-center mx-auto bg-background md:rounded-lg px-4 xl:px-0 py-8",
   };
 
   return (

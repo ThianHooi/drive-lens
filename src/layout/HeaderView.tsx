@@ -14,7 +14,7 @@ export default function Navbar() {
 
   return (
     <nav className="w-full border-b border-border bg-background/95 bg-white shadow-lg backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="mx-auto max-w-screen-xl items-center px-4 md:flex md:px-8">
+      <div className="mx-auto max-w-screen-xl items-center px-4 md:flex xl:px-0">
         <div className="flex items-center justify-between py-3 md:block md:py-5">
           <Link href="/">
             <h1 className="text-3xl font-bold text-purple-600">Logo</h1>
