@@ -1,7 +1,8 @@
 import * as React from "react";
 import Link from "next/link";
 import { Menu } from "lucide-react";
-import { Button } from "~/src/components/ui/button";
+import { Button } from "~/components/ui/button";
+import ConnectWalletButton from "~/modules/auth/ConnectWalletButton";
 
 export default function Navbar() {
   const [showMobileHeader, setShowMobileHeader] = React.useState(false);
@@ -35,12 +36,17 @@ export default function Navbar() {
         >
           <ul className="items-center space-y-8 px-0 md:flex md:space-x-6 md:space-y-0 md:px-12">
             {menus.map((item, idx) => (
-              <li key={idx} className="text-foreground hover:text-foreground/60">
+              <li
+                key={idx}
+                className="text-foreground hover:text-foreground/60"
+              >
                 <Link href={item.path}>{item.title}</Link>
               </li>
             ))}
           </ul>
         </div>
+
+        <ConnectWalletButton />
       </div>
     </nav>
   );
