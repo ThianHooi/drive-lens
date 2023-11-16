@@ -17,6 +17,7 @@ const config = {
     locales: ["en"],
     defaultLocale: "en",
   },
+  transpilePackages: ["@lens-protocol"],
 };
 
 export default config;

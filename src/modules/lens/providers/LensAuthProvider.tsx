@@ -143,8 +143,6 @@ const LensAuthProvider = (props: ChildrenT) => {
 
   useEffect(() => {
     twSDK?.wallet.events.on("signerChanged", (signer) => {
-      console.log("signerChanged", signer);
-
       if (!!signer) {
         signer
           .getAddress()

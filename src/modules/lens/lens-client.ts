@@ -4,7 +4,7 @@ import {
   development,
 } from "@lens-protocol/client";
 
-class LocalStorageProvider implements IStorageProvider {
+export class LocalStorageProvider implements IStorageProvider {
   getItem(key: string) {
     return window.localStorage.getItem(key);
   }

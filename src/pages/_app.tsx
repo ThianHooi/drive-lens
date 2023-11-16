@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { type NextPage } from "next";
 import { type AppType } from "next/app";
 import Head from "next/head";
@@ -9,6 +11,7 @@ import { ThirdwebProvider } from "@thirdweb-dev/react";
 import { Mumbai } from "@thirdweb-dev/chains";
 import { dAPP_METADATA } from "~/constants";
 import LensAuthProvider from "~/modules/lens/providers/LensAuthProvider";
+import { Toaster } from "~/components/ui/toaster";
 
 type NextPageWithLayout = NextPage & {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -57,6 +60,7 @@ const MyApp = ({ Component }: AppPropsWithLayout) => {
           </Head>
           <main className="max-w-screen font-primary">
             {getLayout(<Component />)}
+            <Toaster />
           </main>
         </LensAuthProvider>
       </ThirdwebProvider>

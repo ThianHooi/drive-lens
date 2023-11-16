@@ -9,7 +9,6 @@ type AuthInfo = {
 };
 
 type LensAuth = {
-  signIn: (address: string) => Promise<void>;
   logout: () => Promise<void>;
   createProfile: () => Promise<void>;
   getProfilePictureUri: () => string | undefined;
@@ -19,7 +18,7 @@ type LensAuth = {
 const useLensAuth = (): LensAuth => {
   const ctx = useContext(LensAuthContext);
 
-  return Object.assign({}, ctx);
+  return ctx;
 };
 
 export default useLensAuth;
