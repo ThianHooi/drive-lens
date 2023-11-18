@@ -1,10 +1,18 @@
 import { type AnyPublicationFragment } from "@lens-protocol/client";
 import { User } from "lucide-react";
 import React from "react";
-import Markdown from "react-markdown";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { Card, CardContent, CardHeader } from "~/components/ui/card";
 import { getLensProfileInfo } from "~/utils/lens-profile";
+import dynamic from "next/dynamic";
+
+const EditorMarkdown = dynamic(
+  () =>
+    import("@uiw/react-md-editor").then((mod) => {
+      return mod.default.Markdown;
+    }),
+  { ssr: false },
+);
 
 type Props = {
   publication: AnyPublicationFragment;
@@ -54,11 +62,13 @@ const PublicationCard = ({ publication }: Props) => {
         </div>
       </CardHeader>
       <CardContent>
-        <Markdown>{publication.metadata.content}</Markdown>
+        <EditorMarkdown
+          wrapperElement={{
+            "data-color-mode": "light",
+          }}
+          source={publication.metadata.content}
+        />
       </CardContent>
-      {/* <CardFooter className="flex justify-between">
-        
-      </CardFooter> */}
     </Card>
   );
 };

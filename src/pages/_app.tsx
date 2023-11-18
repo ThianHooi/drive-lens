@@ -13,6 +13,9 @@ import { dAPP_METADATA } from "~/constants";
 import LensAuthProvider from "~/modules/lens/providers/LensAuthProvider";
 import { Toaster } from "~/components/ui/toaster";
 
+import "@uiw/react-md-editor/markdown-editor.css";
+import "@uiw/react-markdown-preview/markdown.css";
+
 type NextPageWithLayout = NextPage & {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   getLayout?: (page: ReactElement, pageProps?: any) => ReactNode;
