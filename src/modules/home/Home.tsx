@@ -1,6 +1,6 @@
 import React from "react";
 import PublicationList from "../publication/PublicationList";
-import CreatePublicationCard from "../publication/CreatePublicationCard";
+import CreatePublicationCard from "../publication/CreatePublication/CreatePublicationCard";
 
 const Home = () => {
   return (

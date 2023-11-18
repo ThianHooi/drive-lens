@@ -6,10 +6,12 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { Loader2, LogOut, User } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
+import ProfileManagerSetting from "./ProfileManager";
 
 const ProfileButton = () => {
   const { profile, logout, getProfilePictureUri } = useLensAuth();
@@ -30,6 +32,10 @@ const ProfileButton = () => {
         <span>{profile?.handle?.localName}</span>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
+        <DropdownMenuItem>
+          <ProfileManagerSetting />
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
         <DropdownMenuItem>
           <Button onClick={logout} variant="link" size={"sm"}>
             <LogOut className="mr-2 h-4 w-4" />

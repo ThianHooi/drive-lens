@@ -15,6 +15,7 @@ const defaultLensAuth: LensAuth = {
   logout: async () => {},
   createProfile: async () => {},
   getProfilePictureUri: () => undefined,
+  refetchProfile: async () => {},
   loading: false,
   ...defaultAuthInfo,
 };
@@ -141,6 +142,31 @@ const LensAuthProvider = (props: ChildrenT) => {
     return picture.optimized.uri;
   };
 
+  const refetchProfile = async () => {
+    console.log('====================================');
+    console.log('refetchProfile');
+    console.log('====================================');
+    if (!authInfo.profileId) {
+      console.log('====================================');
+      console.log('!authInfo.profileId');
+      console.log('====================================');
+      return;
+    }
+
+    const profile = await lensClient.profile.fetch({
+      forProfileId: authInfo.profileId,
+    });
+
+    console.log('====================================');
+    console.log('profile', profile);
+    console.log('====================================');
+
+    setAuthInfo((prev) => ({
+      ...prev,
+      profile,
+    }));
+  };
+
   useEffect(() => {
     twSDK?.wallet.events.on("signerChanged", (signer) => {
       if (!!signer) {
@@ -165,6 +191,7 @@ const LensAuthProvider = (props: ChildrenT) => {
     createProfile,
     logout,
     getProfilePictureUri,
+    refetchProfile,
     ...authInfo,
   };
 

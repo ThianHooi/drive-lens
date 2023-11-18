@@ -4,6 +4,12 @@
  */
 await import("./src/env.mjs");
 
+import removeImports from "next-remove-imports";
+
+const removeImportsFun = removeImports({
+  options: {},
+});
+
 /** @type {import("next").NextConfig} */
 const config = {
   reactStrictMode: true,
@@ -17,7 +23,11 @@ const config = {
     locales: ["en"],
     defaultLocale: "en",
   },
-  transpilePackages: ["@lens-protocol"],
+  transpilePackages: ["@lens-protocol", 'react-md-editor'],
+  experimental: {
+    esmExternals: "loose",
+  },
+  
 };
 
-export default config;
+export default removeImportsFun(config);

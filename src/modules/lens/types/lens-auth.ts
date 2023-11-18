@@ -10,5 +10,6 @@ export type LensAuth = {
   logout: () => Promise<void>;
   createProfile: () => Promise<void>;
   getProfilePictureUri: () => string | undefined;
+  refetchProfile: () => Promise<void>;
   loading: boolean;
 } & AuthInfo;
