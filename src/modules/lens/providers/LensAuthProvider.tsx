@@ -4,6 +4,10 @@ import { type AuthInfo, type LensAuth } from "../types/lens-auth";
 import { type ChildrenT } from "~/types/Children";
 import { useAddress, useSDK, useDisconnect } from "@thirdweb-dev/react";
 import lensClient from "../lens-client";
+import { env } from "~/env.mjs";
+
+const SHOULD_POLL_PROFILE = env.NEXT_PUBLIC_SHOULD_POLL_PROFILE;
+const POLL_INTERVAL = env.NEXT_PUBLIC_POLL_PROFILE_INTERVAL_MS;
 
 const defaultAuthInfo: AuthInfo = {
   isSignedIn: false,
@@ -142,14 +146,8 @@ const LensAuthProvider = (props: ChildrenT) => {
     return picture.optimized.uri;
   };
 
-  const refetchProfile = async () => {
-    console.log('====================================');
-    console.log('refetchProfile');
-    console.log('====================================');
+  const refetchProfile = useCallback(async () => {
     if (!authInfo.profileId) {
-      console.log('====================================');
-      console.log('!authInfo.profileId');
-      console.log('====================================');
       return;
     }
 
@@ -157,15 +155,27 @@ const LensAuthProvider = (props: ChildrenT) => {
       forProfileId: authInfo.profileId,
     });
 
-    console.log('====================================');
-    console.log('profile', profile);
-    console.log('====================================');
-
     setAuthInfo((prev) => ({
       ...prev,
       profile,
     }));
-  };
+  }, [authInfo.profileId]);
+
+  useEffect(() => {
+    if (SHOULD_POLL_PROFILE === false) {
+      return;
+    }
+
+    const intervalId = setInterval(() => {
+      if (authInfo.isSignedIn) {
+        void refetchProfile();
+      }
+    }, POLL_INTERVAL);
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [authInfo.isSignedIn, refetchProfile]);
 
   useEffect(() => {
     twSDK?.wallet.events.on("signerChanged", (signer) => {

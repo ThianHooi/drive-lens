@@ -12,7 +12,7 @@ export const env = createEnv({
       .url()
       .refine(
         (str) => !str.includes("YOUR_MYSQL_URL_HERE"),
-        "You forgot to change the default URL"
+        "You forgot to change the default URL",
       ),
     NODE_ENV: z
       .enum(["development", "test", "production"])
@@ -25,7 +25,17 @@ export const env = createEnv({
    * `NEXT_PUBLIC_`.
    */
   client: {
-    // NEXT_PUBLIC_CLIENTVAR: z.string(),
+    NEXT_PUBLIC_SHOULD_POLL_PROFILE: z.preprocess(
+      (v) =>
+        z
+          .enum(["true", "false"])
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+          .transform((v) => JSON.parse(v))
+          .catch(v)
+          .parse(v),
+      z.boolean().default(false),
+    ),
+    NEXT_PUBLIC_POLL_PROFILE_INTERVAL_MS: z.coerce.number().default(5000),
   },
 
   /**
@@ -35,7 +45,10 @@ export const env = createEnv({
   runtimeEnv: {
     DATABASE_URL: process.env.DATABASE_URL,
     NODE_ENV: process.env.NODE_ENV,
-    // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
+    NEXT_PUBLIC_SHOULD_POLL_PROFILE:
+      process.env.NEXT_PUBLIC_SHOULD_POLL_PROFILE,
+    NEXT_PUBLIC_POLL_PROFILE_INTERVAL_MS:
+      process.env.NEXT_PUBLIC_POLL_PROFILE_INTERVAL_MS,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially
