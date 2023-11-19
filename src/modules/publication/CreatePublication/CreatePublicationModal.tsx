@@ -10,7 +10,7 @@ import dynamic from "next/dynamic";
 import { useState } from "react";
 import { Button } from "~/components/ui/button";
 import { ExternalLink } from "lucide-react";
-
+import { LocalPublicationType } from "../enum";
 import * as commands from "@uiw/react-md-editor/commands";
 
 const MDEditor = dynamic(
@@ -19,13 +19,26 @@ const MDEditor = dynamic(
 );
 
 type CreatePublicationModalProps = {
+  publicationType: LocalPublicationType;
   createPublicationHandler: (content: string) => void;
 };
 
 const DEFAULT_CONTENT = `**Hello world!!!**`;
 
+const ModalContent = {
+  [LocalPublicationType.TEXT]: {
+    title: "Post something...",
+    description: "Share your thoughts with the world.",
+  },
+  [LocalPublicationType.DRIVE]: {
+    title: "Share a drive...",
+    description: "Share your drive with the world.",
+  },
+};
+
 const CreatePublicationModal = ({
   createPublicationHandler,
+  publicationType,
 }: CreatePublicationModalProps) => {
   const [value, setValue] = useState<string | undefined>(DEFAULT_CONTENT);
 
@@ -41,9 +54,9 @@ const CreatePublicationModal = ({
   return (
     <DialogContent className="max-w-3xl">
       <DialogHeader>
-        <DialogTitle>Create Publication</DialogTitle>
+        <DialogTitle>{ModalContent[publicationType].title}</DialogTitle>
         <DialogDescription>
-          Create a new publication to share your thoughts with the world.
+          {ModalContent[publicationType].description}
         </DialogDescription>
       </DialogHeader>
       <div>
@@ -82,7 +95,12 @@ const CreatePublicationModal = ({
         </DialogDescription>
       </div>
 
-      <DialogFooter>
+      <DialogFooter className="flex flex-row items-center justify-between">
+        {publicationType === LocalPublicationType.DRIVE && (
+          <p className=" italic text-slate-500">
+            Currently, the data for driving journey is generated randomly.
+          </p>
+        )}
         <Button
           disabled={!value}
           onClick={onPostClick}

@@ -6,17 +6,35 @@ import { lensClient, useLensAuth } from "../../lens";
 import { isRelaySuccess } from "@lens-protocol/client";
 import { APP_ID } from "~/constants";
 import { useToast } from "~/components/ui/use-toast";
-import { Loader2, Edit } from "lucide-react";
+import { Edit, CarFront } from "lucide-react";
 import { Dialog, DialogTrigger } from "~/components/ui/dialog";
 import CreatePublicationModal from "./CreatePublicationModal";
+import { useLoading } from "~/modules/loading/LoadingProvider";
+import { getRandomGeoJsonLineString } from "~/utils/geojson";
+import { LocalPublicationType } from "../enum";
 
-// TODO: customise markdown editor command
+const PublicationCardContent = {
+  [LocalPublicationType.TEXT]: {
+    title: "Post something...",
+    icon: <Edit className="mr-2 h-4 w-4" />,
+  },
+  [LocalPublicationType.DRIVE]: {
+    title: "Share a drive...",
+    icon: <CarFront className="mr-2 h-4 w-4" />,
+  },
+};
+
 // TODO: allow upload of images
-// TODO: figure out how to include URL or other metadata
 
-const CreatePublicationCard = () => {
+type CreatePublicationCardProps = {
+  publicationType: LocalPublicationType;
+};
+
+const CreatePublicationCard = ({
+  publicationType,
+}: CreatePublicationCardProps) => {
   const [showCreatePostModal, setShowCreatePostModal] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const { startLoading, stopLoading } = useLoading();
 
   const { isSignedIn, profile } = useLensAuth();
   const { mutateAsync: uploadToIpfs } = useStorageUpload();
@@ -26,7 +44,7 @@ const CreatePublicationCard = () => {
   const createPublicationHandler = async (content: string) => {
     try {
       setShowCreatePostModal(false);
-      setLoading(true);
+      startLoading();
       if (!twSdk) {
         throw new Error("SDK not initialized");
       }
@@ -38,16 +56,17 @@ const CreatePublicationCard = () => {
       const metadata = textOnly({
         content,
         appId: APP_ID,
-        // TODO: add randomly generated geojson
-        // attributes: [
-        //   {
-        //     key: "geojson",
-        //     value:
-        //       '{"type":"LineString","coordinates":[[-101.744384,39.32155],[-101.552124,39.330048],[-101.403808,39.330048],[-101.332397,39.364032],[-101.041259,39.368279],[-100.975341,39.304549],[-100.914916,39.245016],[-100.843505,39.164141],[-100.805053,39.104488],[-100.491943,39.100226],[-100.437011,39.095962],[-100.338134,39.095962],[-100.195312,39.027718],[-100.008544,39.010647],[-99.865722,39.00211],[-99.684448,38.972221],[-99.51416,38.929502],[-99.382324,38.920955],[-99.321899,38.895308],[-99.113159,38.869651],[-99.0802,38.85682],[-98.822021,38.85682],[-98.448486,38.848264],[-98.206787,38.848264],[-98.020019,38.878204],[-97.635498,38.873928]]}',
-        //     type: MetadataAttributeType.JSON,
-        //   },
-        // ],
+        ...(publicationType === LocalPublicationType.DRIVE && {
+          attributes: [
+            {
+              key: "geojson",
+              value: JSON.stringify(getRandomGeoJsonLineString()),
+              type: MetadataAttributeType.JSON,
+            },
+          ],
+        }),
       });
+
       const uri = await uploadToIpfs({ data: [metadata] });
 
       if (!uri?.length || uri.length === 0 || !uri[0]) {
@@ -74,7 +93,7 @@ const CreatePublicationCard = () => {
         variant: "destructive",
       });
     } finally {
-      setLoading(false);
+      stopLoading();
     }
   };
 
@@ -141,24 +160,25 @@ const CreatePublicationCard = () => {
   };
 
   return (
-    <Dialog open={showCreatePostModal} onOpenChange={setShowCreatePostModal}>
+    <Dialog
+      key={`modal-${publicationType}`}
+      open={showCreatePostModal}
+      onOpenChange={setShowCreatePostModal}
+    >
       <Card className="relative w-full">
-        {loading && (
-          <div className="absolute left-0 top-0 flex h-full w-full flex-row items-center justify-center rounded-lg bg-slate-100 opacity-80">
-            <Loader2 className="h-10 w-10 animate-spin" />
-          </div>
-        )}
         <CardContent className="pt-6">
           <DialogTrigger className="w-full">
             <div className="inline-flex h-10 w-full items-center justify-start rounded-md border border-input bg-background px-4 py-2 text-sm font-medium ring-offset-background hover:bg-accent hover:text-accent-foreground">
-              <Edit className="mr-2 h-4 w-4" />
-              Post something...
+              {PublicationCardContent[publicationType].icon}
+              {PublicationCardContent[publicationType].title}
             </div>
           </DialogTrigger>
         </CardContent>
       </Card>
       <CreatePublicationModal
+        key={`create-${publicationType}-publication-modal`}
         createPublicationHandler={createPublicationHandler}
+        publicationType={publicationType}
       />
     </Dialog>
   );

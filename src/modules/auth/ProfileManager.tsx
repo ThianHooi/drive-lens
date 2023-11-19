@@ -4,6 +4,7 @@ import { useSDK } from "@thirdweb-dev/react";
 import { useToast } from "~/components/ui/use-toast";
 import { type GraphqlErrorResponse } from "~/types/graphql";
 import { Switch } from "~/components/ui/switch";
+import { useLoading } from "../loading/LoadingProvider";
 
 const ToastMessages = {
   enabled: {
@@ -20,11 +21,13 @@ const ProfileManagerSetting = () => {
   const { profile, refetchProfile } = useLensAuth();
   const twSdk = useSDK();
   const { toast } = useToast();
+  const { startLoading, stopLoading } = useLoading();
 
   if (!profile) return null;
 
   const toggleProfileManager = async () => {
     try {
+      startLoading();
       if (!twSdk) {
         throw new Error("SDK not initialized");
       }
@@ -82,6 +85,8 @@ const ProfileManagerSetting = () => {
         description: "Please try again later",
         variant: "destructive",
       });
+    } finally {
+      stopLoading();
     }
   };
 

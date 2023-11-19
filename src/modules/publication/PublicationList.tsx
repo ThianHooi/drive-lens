@@ -72,7 +72,7 @@ const PublicationList = () => {
       )}
 
       {publications.length > 0 && !loading && (
-        <div className="flex flex-col space-y-0">
+        <div className="flex flex-col space-y-4">
           {publications.map((publication) => {
             return (
               <PublicationCard key={publication.id} publication={publication} />
