@@ -2,9 +2,9 @@ import Head from "next/head";
 import { type ReactElement } from "react";
 import { dAPP_METADATA } from "~/constants";
 import MainLayout from "~/layout/MainLayout";
-import Home from "~/modules/home/Home";
+import Dashboard from "~/modules/dashboard/Dashboard";
 
-export default function HomePage() {
+export default function DashboardPage() {
   return (
     <>
       <Head>
@@ -13,12 +13,12 @@ export default function HomePage() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className="flex min-h-screen w-full flex-col">
-        <Home />
+        <Dashboard />
       </div>
     </>
   );
 }
 
-HomePage.getLayout = function getLayout(page: ReactElement) {
+DashboardPage.getLayout = function getLayout(page: ReactElement) {
   return <MainLayout>{page}</MainLayout>;
 };

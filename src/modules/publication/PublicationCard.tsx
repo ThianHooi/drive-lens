@@ -4,12 +4,18 @@ import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { Card, CardContent, CardHeader } from "~/components/ui/card";
 import { getLensProfileInfo } from "~/utils/lens-profile";
 import dynamic from "next/dynamic";
-import { GEO_JSON_ATTRIBUTE_KEY } from "~/constants";
+import {
+  DRIVING_DISTANCE_ATTRIBUTE_KEY,
+  DRIVING_DURATION_ATTRIBUTE_KEY,
+  GEO_JSON_ATTRIBUTE_KEY,
+} from "~/constants";
 import MapWrapper from "./MapWrapper";
 import { type GeoJsonLineString } from "~/types/geojson";
 import { isValidGeoJsonLineStringObject } from "~/utils/geojson";
 import PublicationActionMenu from "./PublicationActionMenu";
 import { useLensAuth } from "../lens";
+import { z } from "zod";
+import { getDrivingDuration } from "~/utils/format";
 
 const EditorMarkdown = dynamic(
   () =>
@@ -54,12 +60,34 @@ const PublicationCard = ({ publication }: Props) => {
 
   const { attributes, content } = publication.metadata;
 
-  const geoJsonAttributeIndex = (attributes ?? []).find((attr) => {
+  const geoJsonAttribute = (attributes ?? []).find((attr) => {
     if (
       (attr.type as string) === "JSON" &&
       attr.key === GEO_JSON_ATTRIBUTE_KEY
     ) {
       return isValidGeoJsonLineStringObject(JSON.parse(attr.value) as unknown);
+    }
+
+    return false;
+  });
+
+  const drivingDurationAttribute = (attributes ?? []).find((attr) => {
+    if (
+      (attr.type as string) === "NUMBER" &&
+      attr.key === DRIVING_DURATION_ATTRIBUTE_KEY
+    ) {
+      return z.number().safeParse(Number(attr.value)).success;
+    }
+
+    return false;
+  });
+
+  const drivingDistanceAttribute = (attributes ?? []).find((attr) => {
+    if (
+      (attr.type as string) === "NUMBER" &&
+      attr.key === DRIVING_DISTANCE_ATTRIBUTE_KEY
+    ) {
+      return z.number().safeParse(Number(attr.value)).success;
     }
 
     return false;
@@ -93,13 +121,32 @@ const PublicationCard = ({ publication }: Props) => {
           }}
           source={content}
         />
-        {!!geoJsonAttributeIndex && (
+        {!!geoJsonAttribute && (
           <MapWrapper
-            geoJson={
-              JSON.parse(geoJsonAttributeIndex.value) as GeoJsonLineString
-            }
+            geoJson={JSON.parse(geoJsonAttribute.value) as GeoJsonLineString}
           />
         )}
+        {!!drivingDurationAttribute || !!drivingDistanceAttribute ? (
+          <div className="flex w-full flex-row justify-between">
+            <div className="flex flex-col space-y-1">
+              <span className="items-center text-sm italic text-slate-500">
+                Distance 🏎️
+              </span>
+              <span className="font-bold italic">
+                {drivingDistanceAttribute?.value} km
+              </span>
+            </div>
+
+            <div className="flex flex-col space-y-1">
+              <span className="items-center text-sm italic text-slate-500">
+                Duration ⏱️
+              </span>
+              <span className="font-bold italic">
+                {getDrivingDuration(drivingDurationAttribute?.value)}
+              </span>
+            </div>
+          </div>
+        ) : null}
       </CardContent>
     </Card>
   );

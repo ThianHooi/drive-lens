@@ -10,7 +10,9 @@ export const dAPP_METADATA: DAppMetaData = {
 
 export const APP_ID = "mazda-x-lens";
 
-export const GEO_JSON_ATTRIBUTE_KEY = "geojson";
+export const GEO_JSON_ATTRIBUTE_KEY = `${APP_ID}:geojson`;
+export const DRIVING_DISTANCE_ATTRIBUTE_KEY = `${APP_ID}:driving-distance`;
+export const DRIVING_DURATION_ATTRIBUTE_KEY = `${APP_ID}:driving-duration`;
 
 export const DUMMY_DRIVING_JOURNEYS: GeoJsonLineString[] = [
   {

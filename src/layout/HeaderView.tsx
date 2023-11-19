@@ -3,13 +3,21 @@ import Link from "next/link";
 import { Menu } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import ConnectWalletButton from "~/modules/auth/ConnectWalletButton";
+import { useRouter } from "next/router";
+import { cn } from "~/utils/ui";
 
 export default function Navbar() {
   const [showMobileHeader, setShowMobileHeader] = React.useState(false);
 
+  const router = useRouter();
+
   const menus = [
-    { title: "Home", path: "/your-path" },
-    { title: "Explore", path: "/your-path" },
+    { title: "Home", path: "/", isActive: router.pathname === "/" },
+    {
+      title: "Dashboard",
+      path: "/dashboard",
+      isActive: router.pathname === "/dashboard",
+    },
   ];
 
   return (
@@ -38,7 +46,10 @@ export default function Navbar() {
             {menus.map((item, idx) => (
               <li
                 key={idx}
-                className="text-foreground hover:text-foreground/60"
+                className={cn("text-foreground hover:text-foreground/60", {
+                  "text-foreground/60": !item.isActive,
+                  "font-extrabold text-ring": item.isActive,
+                })}
               >
                 <Link href={item.path}>{item.title}</Link>
               </li>

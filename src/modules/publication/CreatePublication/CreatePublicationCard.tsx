@@ -4,7 +4,12 @@ import { MetadataAttributeType, textOnly } from "@lens-protocol/metadata";
 import { useSDK, useStorageUpload } from "@thirdweb-dev/react";
 import { lensClient, useLensAuth } from "../../lens";
 import { isRelaySuccess } from "@lens-protocol/client";
-import { APP_ID } from "~/constants";
+import {
+  APP_ID,
+  DRIVING_DISTANCE_ATTRIBUTE_KEY,
+  DRIVING_DURATION_ATTRIBUTE_KEY,
+  GEO_JSON_ATTRIBUTE_KEY,
+} from "~/constants";
 import { useToast } from "~/components/ui/use-toast";
 import { Edit, CarFront } from "lucide-react";
 import { Dialog, DialogTrigger } from "~/components/ui/dialog";
@@ -12,6 +17,7 @@ import CreatePublicationModal from "./CreatePublicationModal";
 import { useLoading } from "~/modules/loading/LoadingProvider";
 import { getRandomGeoJsonLineString } from "~/utils/geojson";
 import { LocalPublicationType } from "../enum";
+import { getRandomNumber } from "~/utils/random-number";
 
 const PublicationCardContent = {
   [LocalPublicationType.TEXT]: {
@@ -59,9 +65,19 @@ const CreatePublicationCard = ({
         ...(publicationType === LocalPublicationType.DRIVE && {
           attributes: [
             {
-              key: "geojson",
+              key: GEO_JSON_ATTRIBUTE_KEY,
               value: JSON.stringify(getRandomGeoJsonLineString()),
               type: MetadataAttributeType.JSON,
+            },
+            {
+              key: DRIVING_DURATION_ATTRIBUTE_KEY,
+              value: getRandomNumber(1, 18000).toString(), // 1 to 5 hours
+              type: MetadataAttributeType.NUMBER,
+            },
+            {
+              key: DRIVING_DISTANCE_ATTRIBUTE_KEY,
+              value: getRandomNumber(1, 400).toString(), // 1 to 400 km
+              type: MetadataAttributeType.NUMBER,
             },
           ],
         }),

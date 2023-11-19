@@ -20,9 +20,9 @@ const Home = () => {
         <PublicationList />
       </div>
       <div className="hidden w-[30%] flex-col space-y-8 lg:flex ">
-        <div className="rounded-md bg-white p-4 shadow-md">
+        {/* <div className="rounded-md bg-white p-4 shadow-md">
           <p>Right side</p>
-        </div>
+        </div> */}
       </div>
     </div>
   );
