@@ -11,7 +11,7 @@ import {
   GEO_JSON_ATTRIBUTE_KEY,
 } from "~/constants";
 import { useToast } from "~/components/ui/use-toast";
-import { Edit, CarFront } from "lucide-react";
+import { Edit, CarFront, MessageSquare } from "lucide-react";
 import { Dialog, DialogTrigger } from "~/components/ui/dialog";
 import CreatePublicationModal from "./CreatePublicationModal";
 import { useLoading } from "~/modules/loading/LoadingProvider";
@@ -28,16 +28,24 @@ const PublicationCardContent = {
     title: "Share a drive...",
     icon: <CarFront className="mr-2 h-4 w-4" />,
   },
+  [LocalPublicationType.COMMENT]: {
+    title: "Comment on this post...",
+    icon: <MessageSquare className="mr-2 h-4 w-4" />,
+  },
 };
 
 // TODO: allow upload of images
 
 type CreatePublicationCardProps = {
   publicationType: LocalPublicationType;
+  commentOn?: string;
+  onCreateSuccess?: () => void;
 };
 
 const CreatePublicationCard = ({
   publicationType,
+  commentOn,
+  onCreateSuccess,
 }: CreatePublicationCardProps) => {
   const [showCreatePostModal, setShowCreatePostModal] = useState(false);
   const { startLoading, stopLoading } = useLoading();
@@ -46,6 +54,10 @@ const CreatePublicationCard = ({
   const { mutateAsync: uploadToIpfs } = useStorageUpload();
   const twSdk = useSDK();
   const { toast } = useToast();
+
+  if (publicationType === LocalPublicationType.COMMENT && !commentOn) {
+    throw new Error("Comment On ID is not provided for comment publication");
+  }
 
   const createPublicationHandler = async (content: string) => {
     try {
@@ -102,6 +114,8 @@ const CreatePublicationCard = ({
         description: "Your post was successfully posted",
         variant: "default",
       });
+
+      onCreateSuccess?.();
     } catch (error) {
       toast({
         title: (error as Error)?.message ?? "Something went wrong",
@@ -115,9 +129,15 @@ const CreatePublicationCard = ({
 
   const createByLensProfileManager = async (contentURI: string) => {
     try {
-      const result = await lensClient.publication.postOnchain({
-        contentURI,
-      });
+      const result =
+        publicationType === LocalPublicationType.COMMENT
+          ? await lensClient.publication.commentOnchain({
+              contentURI,
+              commentOn: commentOn!,
+            })
+          : await lensClient.publication.postOnchain({
+              contentURI,
+            });
 
       const resultValue = result.unwrap();
 
@@ -143,9 +163,14 @@ const CreatePublicationCard = ({
       }
 
       const resultTypedData =
-        await lensClient.publication.createOnchainPostTypedData({
-          contentURI,
-        });
+        publicationType === LocalPublicationType.COMMENT
+          ? await lensClient.publication.createOnchainCommentTypedData({
+              contentURI,
+              commentOn: commentOn!,
+            })
+          : await lensClient.publication.createOnchainPostTypedData({
+              contentURI,
+            });
 
       const { id, typedData } = resultTypedData.unwrap();
 

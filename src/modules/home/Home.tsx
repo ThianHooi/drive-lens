@@ -6,7 +6,7 @@ import { LocalPublicationType } from "../publication/enum";
 const Home = () => {
   return (
     <div className="flex flex-row space-x-4">
-      <div className="flex w-full flex-col space-y-8 lg:w-[70%] ">
+      <div className="flex w-full flex-col space-y-8 lg:w-[70%]">
         <div className="flex flex-row space-x-4">
           <CreatePublicationCard
             publicationType={LocalPublicationType.TEXT}
@@ -19,11 +19,7 @@ const Home = () => {
         </div>
         <PublicationList />
       </div>
-      <div className="hidden w-[30%] flex-col space-y-8 lg:flex ">
-        {/* <div className="rounded-md bg-white p-4 shadow-md">
-          <p>Right side</p>
-        </div> */}
-      </div>
+      <div className="hidden w-[30%] flex-col space-y-8 lg:flex "></div>
     </div>
   );
 };

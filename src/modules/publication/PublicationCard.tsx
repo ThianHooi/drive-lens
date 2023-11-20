@@ -22,6 +22,8 @@ import { useLensAuth } from "../lens";
 import { z } from "zod";
 import { getDrivingDuration } from "~/utils/format";
 import PublicationActions from "./PublicationActions";
+import Link from "next/link";
+import { cn } from "~/utils/ui";
 
 const EditorMarkdown = dynamic(
   () =>
@@ -33,13 +35,14 @@ const EditorMarkdown = dynamic(
 
 type Props = {
   publication: AnyPublicationFragment;
+  shouldShowLink?: boolean;
 };
 
 type PostAvatarProps = {
   uri: string | null | undefined;
 };
 
-const PostAvatar = ({ uri }: PostAvatarProps) => {
+export const PostAvatar = ({ uri }: PostAvatarProps) => {
   return (
     <Avatar>
       {uri && <AvatarImage src={uri} />}
@@ -50,7 +53,7 @@ const PostAvatar = ({ uri }: PostAvatarProps) => {
   );
 };
 
-const PublicationCard = ({ publication }: Props) => {
+const PublicationCard = ({ publication, shouldShowLink = true }: Props) => {
   const { profile } = useLensAuth();
 
   if (
@@ -100,7 +103,11 @@ const PublicationCard = ({ publication }: Props) => {
   });
 
   return (
-    <Card>
+    <Card
+      className={cn("relative", {
+        "cursor-pointer hover:bg-secondary": shouldShowLink,
+      })}
+    >
       <CardHeader className="flex w-full flex-row items-center justify-between">
         <div className="flex flex-row items-center space-x-4">
           <PostAvatar uri={profilePictureUri} />
@@ -162,6 +169,13 @@ const PublicationCard = ({ publication }: Props) => {
           operations={publication.operations}
         />
       </CardFooter>
+
+      {shouldShowLink && (
+        <Link
+          href={`/publication/${publication.id}`}
+          className="absolute inset-0"
+        />
+      )}
     </Card>
   );
 };

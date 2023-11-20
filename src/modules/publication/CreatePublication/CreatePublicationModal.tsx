@@ -34,6 +34,10 @@ const ModalContent = {
     title: "Share a drive...",
     description: "Share your drive with the world.",
   },
+  [LocalPublicationType.COMMENT]: {
+    title: "Comment on this post...",
+    description: "Share your comment.",
+  },
 };
 
 const CreatePublicationModal = ({
