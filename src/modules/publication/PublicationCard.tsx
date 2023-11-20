@@ -1,7 +1,12 @@
 import { type AnyPublicationFragment } from "@lens-protocol/client";
 import { User } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
-import { Card, CardContent, CardHeader } from "~/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "~/components/ui/card";
 import { getLensProfileInfo } from "~/utils/lens-profile";
 import dynamic from "next/dynamic";
 import {
@@ -16,6 +21,7 @@ import PublicationActionMenu from "./PublicationActionMenu";
 import { useLensAuth } from "../lens";
 import { z } from "zod";
 import { getDrivingDuration } from "~/utils/format";
+import PublicationActions from "./PublicationActions";
 
 const EditorMarkdown = dynamic(
   () =>
@@ -126,6 +132,7 @@ const PublicationCard = ({ publication }: Props) => {
             geoJson={JSON.parse(geoJsonAttribute.value) as GeoJsonLineString}
           />
         )}
+
         {!!drivingDurationAttribute || !!drivingDistanceAttribute ? (
           <div className="flex w-full flex-row justify-between">
             <div className="flex flex-col space-y-1">
@@ -148,6 +155,13 @@ const PublicationCard = ({ publication }: Props) => {
           </div>
         ) : null}
       </CardContent>
+      <CardFooter>
+        <PublicationActions
+          publicationId={publication.id}
+          stats={publication.stats}
+          operations={publication.operations}
+        />
+      </CardFooter>
     </Card>
   );
 };
