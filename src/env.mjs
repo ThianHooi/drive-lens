@@ -17,6 +17,8 @@ export const env = createEnv({
     NODE_ENV: z
       .enum(["development", "test", "production"])
       .default("development"),
+    OWNER_WALLET_PRIVATE_KEY: z.string(),
+    TW_CLIENT_SECRET: z.string(),
   },
 
   /**
@@ -36,6 +38,8 @@ export const env = createEnv({
       z.boolean().default(false),
     ),
     NEXT_PUBLIC_POLL_PROFILE_INTERVAL_MS: z.coerce.number().default(5000),
+    NEXT_PUBLIC_AWARD_CONTRACT_ADDRESS: z.string(),
+    NEXT_PUBLIC_TW_CLIENT_ID: z.string(),
   },
 
   /**
@@ -45,10 +49,15 @@ export const env = createEnv({
   runtimeEnv: {
     DATABASE_URL: process.env.DATABASE_URL,
     NODE_ENV: process.env.NODE_ENV,
+    OWNER_WALLET_PRIVATE_KEY: process.env.OWNER_WALLET_PRIVATE_KEY,
+    TW_CLIENT_SECRET: process.env.TW_CLIENT_SECRET,
     NEXT_PUBLIC_SHOULD_POLL_PROFILE:
       process.env.NEXT_PUBLIC_SHOULD_POLL_PROFILE,
     NEXT_PUBLIC_POLL_PROFILE_INTERVAL_MS:
       process.env.NEXT_PUBLIC_POLL_PROFILE_INTERVAL_MS,
+    NEXT_PUBLIC_AWARD_CONTRACT_ADDRESS:
+      process.env.NEXT_PUBLIC_AWARD_CONTRACT_ADDRESS,
+    NEXT_PUBLIC_TW_CLIENT_ID: process.env.NEXT_PUBLIC_TW_CLIENT_ID,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

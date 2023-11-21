@@ -17,6 +17,8 @@ import LoadingOverlay from "~/components/LoadingOverlay";
 import "@uiw/react-md-editor/markdown-editor.css";
 import "@uiw/react-markdown-preview/markdown.css";
 import { LoadingProvider } from "~/modules/loading/LoadingProvider";
+import { env } from "~/env.mjs";
+import { MissionProvider } from "~/modules/mission/providers/MissionProvider";
 
 type NextPageWithLayout = NextPage & {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -44,37 +46,39 @@ const MyApp = ({ Component }: AppPropsWithLayout) => {
       <LoadingProvider>
         <ThirdwebProvider
           activeChain={Mumbai}
-          clientId="e007025daba08c7dd36091e467c8e65f"
+          clientId={env.NEXT_PUBLIC_TW_CLIENT_ID}
           dAppMeta={dAPP_METADATA}
           autoConnect
         >
           <LensAuthProvider>
-            <style jsx global>
-              {`
-                :root {
-                  --poppins-font: ${poppins.style.fontFamily};
-                  --raleway-font: ${raleway.style.fontFamily};
-                }
-              `}
-            </style>
-            <Head>
-              <title>{dAPP_METADATA.name}</title>
-              <meta
-                name="viewport"
-                content="width=device-width, initial-scale=1"
-              />
-              <link
-                rel="stylesheet"
-                href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-                integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-                crossOrigin=""
-              />
-            </Head>
-            <main className="max-w-screen font-primary">
-              {getLayout(<Component />)}
-              <Toaster />
-              <LoadingOverlay />
-            </main>
+            <MissionProvider>
+              <style jsx global>
+                {`
+                  :root {
+                    --poppins-font: ${poppins.style.fontFamily};
+                    --raleway-font: ${raleway.style.fontFamily};
+                  }
+                `}
+              </style>
+              <Head>
+                <title>{dAPP_METADATA.name}</title>
+                <meta
+                  name="viewport"
+                  content="width=device-width, initial-scale=1"
+                />
+                <link
+                  rel="stylesheet"
+                  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+                  integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+                  crossOrigin=""
+                />
+              </Head>
+              <main className="max-w-screen font-primary">
+                {getLayout(<Component />)}
+                <Toaster />
+                <LoadingOverlay />
+              </main>
+            </MissionProvider>
           </LensAuthProvider>
         </ThirdwebProvider>
       </LoadingProvider>

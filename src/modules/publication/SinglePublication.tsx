@@ -12,12 +12,14 @@ import CreatePublicationCard from "./CreatePublication/CreatePublicationCard";
 import { LocalPublicationType } from "./enum";
 import CommentCard from "./CommentCard";
 import ViewOnChain from "./ViewOnChain";
+import { MissionCard } from "../mission/MissionCard";
 
 const SinglePublication = () => {
   const [loading, setLoading] = useState(true);
   const [publication, setPublication] =
     useState<AnyPublicationFragment | null>();
   const [comments, setComments] = useState<AnyPublicationFragment[]>([]);
+  const [refetchFlag, setRefetchFlag] = useState(false);
 
   const router = useRouter();
   const { id } = router.query as { id: string };
@@ -56,7 +58,7 @@ const SinglePublication = () => {
     };
 
     fetchComments().catch((error) => console.error(error));
-  }, [id, publication]);
+  }, [id, publication, refetchFlag]);
 
   if (loading) {
     return <PublicationSkeleton />;
@@ -79,7 +81,9 @@ const SinglePublication = () => {
         <CreatePublicationCard
           commentOn={publication.id}
           onCreateSuccess={() => {
-            void router.reload();
+            setTimeout(() => {
+              setRefetchFlag((prev) => !prev);
+            }, 3000);
           }}
           publicationType={LocalPublicationType.COMMENT}
         />
@@ -91,6 +95,7 @@ const SinglePublication = () => {
 
       <div className="hidden w-[30%] flex-col space-y-8 lg:flex ">
         <ViewOnChain txHash={publication.txHash!} />
+        <MissionCard />
       </div>
     </div>
   );

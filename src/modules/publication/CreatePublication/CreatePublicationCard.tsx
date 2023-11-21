@@ -18,6 +18,8 @@ import { useLoading } from "~/modules/loading/LoadingProvider";
 import { getRandomGeoJsonLineString } from "~/utils/geojson";
 import { LocalPublicationType } from "../enum";
 import { getRandomNumber } from "~/utils/random-number";
+import { useMission } from "~/modules/mission/providers/MissionProvider";
+import { MissionType } from "~/modules/mission/providers/types";
 
 const PublicationCardContent = {
   [LocalPublicationType.TEXT]: {
@@ -54,6 +56,7 @@ const CreatePublicationCard = ({
   const { mutateAsync: uploadToIpfs } = useStorageUpload();
   const twSdk = useSDK();
   const { toast } = useToast();
+  const missionContext = useMission();
 
   if (publicationType === LocalPublicationType.COMMENT && !commentOn) {
     throw new Error("Comment On ID is not provided for comment publication");
@@ -116,6 +119,12 @@ const CreatePublicationCard = ({
       });
 
       onCreateSuccess?.();
+
+      void missionContext.completeTask(
+        publicationType === LocalPublicationType.COMMENT
+          ? MissionType.FIRST_COMMENT
+          : MissionType.FIRST_POST,
+      );
     } catch (error) {
       toast({
         title: (error as Error)?.message ?? "Something went wrong",

@@ -18,6 +18,11 @@ export default function Navbar() {
       path: "/dashboard",
       isActive: router.pathname === "/dashboard",
     },
+    {
+      title: "Award",
+      path: "/award",
+      isActive: router.pathname === "/award",
+    },
   ];
 
   return (

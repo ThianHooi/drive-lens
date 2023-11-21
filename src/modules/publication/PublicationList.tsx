@@ -20,7 +20,7 @@ const PublicationList = () => {
     const fetchPublications = async () => {
       setLoading(true);
       const result = await lensClient.explore.publications({
-        orderBy: ExplorePublicationsOrderByType.TopCommented,
+        orderBy: ExplorePublicationsOrderByType.Latest,
         where: {
           publicationTypes: [ExplorePublicationType.Post],
           metadata: {
