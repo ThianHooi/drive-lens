@@ -16,6 +16,7 @@ import {
 import { Skeleton } from "~/components/ui/skeleton";
 import { env } from "~/env.mjs";
 import { MissionCard } from "./MissionCard";
+import LoginIcon from "~/components/icons/LoginIcon";
 
 const getNFtExplorerUrl = (contractAddress: string, nftId: string) => {
   const chain = getChainByChainId(Mumbai.chainId);
@@ -38,7 +39,13 @@ const AwardList = () => {
     count: 100,
   });
 
-  if (!address) return null;
+  if (!address)
+    return (
+      <div className="mt-24 flex h-full w-full flex-col items-center justify-center space-y-8">
+        <p className="text-2xl font-semibold">Please login to your account</p>
+        <LoginIcon className="h-60 w-60" />
+      </div>
+    );
 
   if (isLoading) {
     return (
