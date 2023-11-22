@@ -5,6 +5,8 @@ import { type ChildrenT } from "~/types/Children";
 import { useAddress, useSDK, useDisconnect } from "@thirdweb-dev/react";
 import lensClient from "../lens-client";
 import { env } from "~/env.mjs";
+import CreateProfileDialog from "../CreateProfileDialog";
+import { useToast } from "~/components/ui/use-toast";
 
 const SHOULD_POLL_PROFILE = env.NEXT_PUBLIC_SHOULD_POLL_PROFILE;
 const POLL_INTERVAL = env.NEXT_PUBLIC_POLL_PROFILE_INTERVAL_MS;
@@ -21,6 +23,8 @@ const defaultLensAuth: LensAuth = {
   getProfilePictureUri: () => undefined,
   refetchProfile: async () => {},
   loading: false,
+  showCreateProfileDialog: () => {},
+  onCreateProfileSuccess: () => {},
   ...defaultAuthInfo,
 };
 
@@ -30,9 +34,12 @@ LensAuthContext.displayName = "LensAuthContext";
 const LensAuthProvider = (props: ChildrenT) => {
   const address = useAddress();
   const twSDK = useSDK();
+  const { toast } = useToast();
 
   const disconnect = useDisconnect();
 
+  const [signedInWalletAddress, setSignedInWalletAddress] = useState<string>();
+  const [showCreateProfileDialog, setShowCreateProfileDialog] = useState(false);
   const [loading, setLoading] = useState(false);
   const [authInfo, setAuthInfo] = useState<AuthInfo>({
     isSignedIn: false,
@@ -40,7 +47,10 @@ const LensAuthProvider = (props: ChildrenT) => {
     profile: null,
   });
 
-  const resetAuthInfo = () => setAuthInfo(defaultAuthInfo);
+  const resetAuthInfo = () => {
+    setAuthInfo(defaultAuthInfo);
+    setSignedInWalletAddress(undefined);
+  };
 
   const signIntoLens = useCallback(async () => {
     const isAuthenticated = await lensClient.authentication.isAuthenticated();
@@ -50,18 +60,37 @@ const LensAuthProvider = (props: ChildrenT) => {
       return;
     }
 
-    const profileId = await lensClient.authentication.getProfileId();
-    const profile = await lensClient.profile.fetch({
-      forProfileId: profileId,
-    });
+    try {
+      const profileId = await lensClient.authentication.getProfileId();
+      const profile = await lensClient.profile.fetch({
+        forProfileId: profileId,
+      });
 
-    setAuthInfo((prev) => ({
-      ...prev,
-      isSignedIn: true,
-      profileId,
-      profile,
-    }));
+      setAuthInfo((prev) => ({
+        ...prev,
+        isSignedIn: true,
+        profileId,
+        profile,
+      }));
+
+      setSignedInWalletAddress(profile?.handle?.ownedBy);
+
+      if (!profile) {
+        setShowCreateProfileDialog(true);
+      }
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
   }, []);
+
+  const logout = useCallback(async () => {
+    await lensClient.authentication.logout();
+
+    await disconnect();
+
+    resetAuthInfo();
+  }, [disconnect]);
 
   const signIn = useCallback(
     async (_address: string) => {
@@ -102,32 +131,17 @@ const LensAuthProvider = (props: ChildrenT) => {
 
         await signIntoLens();
       } catch (error) {
-        throw error;
+        console.error("Sign in error", error);
+        void logout();
       } finally {
         setLoading(false);
       }
     },
-    [address, signIntoLens, twSDK],
+    [address, logout, signIntoLens, twSDK],
   );
 
   const createProfile = () => {
     throw new Error("Not implemented");
-  };
-
-  const logout = async () => {
-    if (!address) {
-      throw new Error("Wallet not connected");
-    }
-
-    if (!twSDK) {
-      throw new Error("SDK not connected");
-    }
-
-    await lensClient.authentication.logout();
-
-    await disconnect();
-
-    resetAuthInfo();
   };
 
   const getProfilePictureUri = () => {
@@ -147,19 +161,21 @@ const LensAuthProvider = (props: ChildrenT) => {
   };
 
   const refetchProfile = useCallback(async () => {
-    if (!authInfo.profileId) {
+    const profileID = await lensClient.authentication.getProfileId();
+
+    if (!profileID) {
       return;
     }
 
     const profile = await lensClient.profile.fetch({
-      forProfileId: authInfo.profileId,
+      forProfileId: profileID,
     });
 
     setAuthInfo((prev) => ({
       ...prev,
       profile,
     }));
-  }, [authInfo.profileId]);
+  }, []);
 
   useEffect(() => {
     if (SHOULD_POLL_PROFILE === false) {
@@ -182,19 +198,50 @@ const LensAuthProvider = (props: ChildrenT) => {
       if (!!signer) {
         signer
           .getAddress()
-          .then((address) => {
-            void signIn(address);
+          .then((signerAddress) => {
+            if (!signedInWalletAddress) {
+              void signIn(signerAddress);
+              return;
+            }
+
+            if (signerAddress !== signedInWalletAddress) {
+              void logout();
+              return;
+            }
           })
           .catch((error) => {
             console.error(error);
           });
+
+        return;
       }
+
+      setSignedInWalletAddress(undefined);
     });
 
     return () => {
       twSDK?.wallet.events.off("signerChanged");
     };
-  }, [signIn, twSDK]);
+  }, [address, logout, signIn, signedInWalletAddress, twSDK]);
+
+  const onCreateProfileSuccess = () => {
+    lensClient.authentication
+      .logout()
+      .then(() => {
+        void signIn(address!);
+      })
+      .then(() => setShowCreateProfileDialog(false))
+      .then(() => {
+        toast({
+          title: "Profile created 🎉",
+          description: "Your profile was successfully created",
+          variant: "default",
+        });
+      })
+      .catch((err) => {
+        console.log("onCreateProfileSuccess error", err);
+      });
+  };
 
   const value = {
     loading,
@@ -202,12 +249,18 @@ const LensAuthProvider = (props: ChildrenT) => {
     logout,
     getProfilePictureUri,
     refetchProfile,
+    showCreateProfileDialog: () => setShowCreateProfileDialog(true),
+    onCreateProfileSuccess,
     ...authInfo,
   };
 
   return (
     <LensAuthContext.Provider value={value}>
       {props.children}
+      <CreateProfileDialog
+        open={showCreateProfileDialog}
+        onOpenChange={(open) => setShowCreateProfileDialog(open)}
+      />
     </LensAuthContext.Provider>
   );
 };

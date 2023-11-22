@@ -75,7 +75,7 @@ export const MissionProvider = (props: ChildrenT) => {
           missionType === MissionType.FIRST_POST
             ? "making your first post"
             : "making your first comment"
-        }.}`,
+        }.`,
         action: (
           <Link href={"/award"}>
             <Button

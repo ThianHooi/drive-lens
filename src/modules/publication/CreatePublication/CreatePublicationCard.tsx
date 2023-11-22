@@ -41,7 +41,7 @@ const PublicationCardContent = {
 type CreatePublicationCardProps = {
   publicationType: LocalPublicationType;
   commentOn?: string;
-  onCreateSuccess?: () => void;
+  onCreateSuccess?: (txId?: string) => void;
 };
 
 const CreatePublicationCard = ({
@@ -70,7 +70,7 @@ const CreatePublicationCard = ({
         throw new Error("SDK not initialized");
       }
 
-      if (!isSignedIn) {
+      if (!isSignedIn || !profile) {
         throw new Error("User not signed in");
       }
 
@@ -106,11 +106,9 @@ const CreatePublicationCard = ({
 
       const contentURI = uri[0];
 
-      if (profile?.signless) {
-        await createByLensProfileManager(contentURI);
-      } else {
-        await createByTypedData(contentURI);
-      }
+      const txId = profile?.signless
+        ? await createByLensProfileManager(contentURI)
+        : await createByTypedData(contentURI);
 
       toast({
         title: "Successfully posted",
@@ -118,13 +116,22 @@ const CreatePublicationCard = ({
         variant: "default",
       });
 
-      onCreateSuccess?.();
-
       void missionContext.completeTask(
         publicationType === LocalPublicationType.COMMENT
           ? MissionType.FIRST_COMMENT
           : MissionType.FIRST_POST,
       );
+
+      lensClient.transaction
+        .waitUntilComplete({
+          forTxId: txId,
+        })
+        .then(() => {
+          onCreateSuccess?.(txId);
+        })
+        .catch((error) => {
+          throw error;
+        });
     } catch (error) {
       toast({
         title: (error as Error)?.message ?? "Something went wrong",

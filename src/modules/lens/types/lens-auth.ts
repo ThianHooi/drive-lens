@@ -12,4 +12,6 @@ export type LensAuth = {
   getProfilePictureUri: () => string | undefined;
   refetchProfile: () => Promise<void>;
   loading: boolean;
+  showCreateProfileDialog: () => void;
+  onCreateProfileSuccess: () => void;
 } & AuthInfo;

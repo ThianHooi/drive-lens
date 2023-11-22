@@ -14,11 +14,20 @@ import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import ProfileManagerSetting from "./ProfileManager";
 
 const ProfileButton = () => {
-  const { profile, logout, getProfilePictureUri } = useLensAuth();
+  const { profile, logout, getProfilePictureUri, showCreateProfileDialog } =
+    useLensAuth();
 
   const profilePictureUri = useMemo(getProfilePictureUri, [
     getProfilePictureUri,
   ]);
+
+  if (!profile) {
+    return (
+      <Button onClick={showCreateProfileDialog} variant={"default"} size={"sm"}>
+        Create Profile
+      </Button>
+    );
+  }
 
   return (
     <DropdownMenu>

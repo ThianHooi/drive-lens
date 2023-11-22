@@ -80,7 +80,8 @@ const SinglePublication = () => {
 
         <CreatePublicationCard
           commentOn={publication.id}
-          onCreateSuccess={() => {
+          onCreateSuccess={(txId?: string) => {
+            if (!txId) return;
             setTimeout(() => {
               setRefetchFlag((prev) => !prev);
             }, 3000);

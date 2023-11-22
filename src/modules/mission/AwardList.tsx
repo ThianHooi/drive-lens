@@ -71,7 +71,10 @@ const AwardList = () => {
               );
 
               return (
-                <div key={nft.metadata.id} className="relative">
+                <div
+                  key={nft.metadata.id}
+                  className="relative transition-all duration-300 ease-in-out hover:border-slate-700 hover:shadow-xl "
+                >
                   {nftExplorerUrl && (
                     <a
                       href={nftExplorerUrl}
@@ -81,7 +84,7 @@ const AwardList = () => {
                     />
                   )}
                   <ThirdwebNftMedia
-                    className="bottom-1 rounded-lg border border-slate-300 p-4"
+                    className="bottom-1 rounded-lg border border-slate-300 p-4 "
                     metadata={nft.metadata}
                   />
                 </div>

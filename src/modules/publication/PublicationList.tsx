@@ -9,7 +9,11 @@ import { ExplorePublicationType } from "@lens-protocol/react-web";
 import { APP_ID } from "~/constants";
 import PublicationSkeleton from "./PublicationSkeleton";
 
-const PublicationList = () => {
+type Props = {
+  refetchFlag?: boolean;
+};
+
+const PublicationList = ({ refetchFlag }: Props) => {
   const [publications, setPublications] = useState<AnyPublicationFragment[]>(
     [],
   );
@@ -35,7 +39,7 @@ const PublicationList = () => {
     fetchPublications()
       .catch((error) => console.error(error))
       .finally(() => setLoading(false));
-  }, []);
+  }, [refetchFlag]);
 
   return (
     <>
