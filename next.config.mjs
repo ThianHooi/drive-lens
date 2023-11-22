@@ -6,9 +6,7 @@ await import("./src/env.mjs");
 
 import removeImports from "next-remove-imports";
 
-const removeImportsFun = removeImports({
-  options: {},
-});
+const removeImportsFun = removeImports();
 
 /** @type {import("next").NextConfig} */
 const config = {
