@@ -1,28 +1,32 @@
-# Create T3 App
+# Drive Lens
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+This project is a social web app built on top of [Lens Protocol](https://lens.xyz/). The social app is built with car drivers in focus, but not limited to them. Currently, the app is only available on the Polygon Mumbai Testnet.
 
-## What's next? How do I make an app with this?
+## What can users do with Drive Lens?
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+- 🔐 Authenticate with Lens
+- 💰 Enable gasless and signless transaction by enabling [Lens' Profile Manager](https://docs.lens.xyz/docs/lens-profile-manager)
+- 📝 Create publications and share their driving journey
+- ❤️ Interact with other users' publications
+- 🏆 Earn digital collectibles (NFTs) by completing missions
+- 📊 View dashboard with data about their driving journey
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+### To-do
+- [ ] Optmize authentication flow
+- [ ] Add more missions
+- [ ] Speed up loading time when creating a publication or comment
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+## What technologies are used?
 
-## Learn More
+- [Next.js](https://nextjs.org/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [Lens Protocol](https://lens.xyz/)
+- [thirdweb](https://thirdweb.com/)
+- [shadcn](https://ui.shadcn.com/)
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+## How to run locally?
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
-
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
-
-## How do I deploy this?
-
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+1. Clone the repo
+2. Copy `.env.example` to `.env` and fill in the values
+3. Install dependencies with `bun install`
+4. Run the app with `bun run dev`
