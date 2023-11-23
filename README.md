@@ -23,6 +23,7 @@ This project is a social web app built on top of [Lens Protocol](https://lens.xy
 - [Lens Protocol](https://lens.xyz/)
 - [thirdweb](https://thirdweb.com/)
 - [shadcn](https://ui.shadcn.com/)
+- [Vercel](https://vercel.com/)
 
 ## How to run locally?
 
