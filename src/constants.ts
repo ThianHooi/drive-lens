@@ -3,13 +3,13 @@ import { type GeoJsonLineString } from "./types/geojson";
 import { MissionType } from "./modules/mission/providers/types";
 
 export const dAPP_METADATA: DAppMetaData = {
-  name: "Mazda x Lens",
-  description: "Connecting Mazda owners with Lens",
+  name: "DriveLens",
+  description: "Connecting car owners on Lens",
   isDarkMode: false,
   url: "",
 };
 
-export const APP_ID = "mazda-x-lens";
+export const APP_ID = "drive-lens";
 
 export const GEO_JSON_ATTRIBUTE_KEY = `${APP_ID}:geojson`;
 export const DRIVING_DISTANCE_ATTRIBUTE_KEY = `${APP_ID}:driving-distance`;

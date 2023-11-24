@@ -5,6 +5,7 @@ import { useToast } from "~/components/ui/use-toast";
 import { type GraphqlErrorResponse } from "~/types/graphql";
 import { Switch } from "~/components/ui/switch";
 import { useLoading } from "../loading/LoadingProvider";
+import { useRouter } from "next/router";
 
 const ToastMessages = {
   enabled: {
@@ -22,6 +23,7 @@ const ProfileManagerSetting = () => {
   const twSdk = useSDK();
   const { toast } = useToast();
   const { startLoading, stopLoading } = useLoading();
+  const router = useRouter();
 
   if (!profile) return null;
 
@@ -79,6 +81,8 @@ const ProfileManagerSetting = () => {
       });
 
       await refetchProfile();
+
+      router.reload();
     } catch (error) {
       toast({
         title: (error as Error)?.message ?? "Something went wrong",
