@@ -1,6 +1,9 @@
 # Drive Lens
 
-This project is a social web app built on top of [Lens Protocol](https://lens.xyz/). The social app is built with car drivers in focus, but not limited to them. Currently, the app is only available on the Polygon Mumbai Testnet.
+This project is a social web app built on top of [Lens Protocol](https://lens.xyz/). The social app is built with car drivers in focus, but not limited to them. Currently, the app is only available on the Polygon Mumbai Testnet. 
+
+Know more:
+- [Google Slide](https://docs.google.com/presentation/d/1-XLi00yRRukucXnjGycnEFz9wz5t9pec8asGfgjWpWE/edit?usp=sharing)
 
 ## What can users do with Drive Lens?
 
@@ -24,6 +27,10 @@ This project is a social web app built on top of [Lens Protocol](https://lens.xy
 - [thirdweb](https://thirdweb.com/)
 - [shadcn](https://ui.shadcn.com/)
 - [Vercel](https://vercel.com/)
+
+## Smart Contract
+[ERC1155 - NFT](https://mumbai.polygonscan.com/address/0x00bF29a0A0E7f49fE927a6f99913Af16fb8FD038)
+- combines the functionality of previous standards like ERC-20 (for fungible tokens) and ERC-721 (for non-fungible tokens)
 
 ## How to run locally?
 
