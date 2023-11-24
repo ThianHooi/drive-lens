@@ -13,6 +13,7 @@ import { LocalPublicationType } from "./enum";
 import CommentCard from "./CommentCard";
 import ViewOnChain from "./ViewOnChain";
 import { MissionCard } from "../mission/MissionCard";
+import LinkCollection from "~/components/LinkCollection";
 
 const SinglePublication = () => {
   const [loading, setLoading] = useState(true);
@@ -97,6 +98,7 @@ const SinglePublication = () => {
       <div className="hidden w-[30%] flex-col space-y-8 lg:flex ">
         <ViewOnChain txHash={publication.txHash!} />
         <MissionCard />
+        <LinkCollection />
       </div>
     </div>
   );

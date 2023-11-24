@@ -2,8 +2,6 @@
 
 This project is a social web app built on top of [Lens Protocol](https://lens.xyz/). The social app is built with car drivers in focus, but not limited to them. Currently, the app is only available on the Polygon Mumbai Testnet. 
 
-Know more at [Google Slide](https://docs.google.com/presentation/d/1-XLi00yRRukucXnjGycnEFz9wz5t9pec8asGfgjWpWE/edit?usp=sharing).
-
 Try [_here_](https://drive-lens.vercel.app/).
 
 ## What can users do with Drive Lens?

@@ -3,6 +3,7 @@ import PublicationList from "../publication/PublicationList";
 import CreatePublicationCard from "../publication/CreatePublication/CreatePublicationCard";
 import { LocalPublicationType } from "../publication/enum";
 import { MissionCard } from "../mission/MissionCard";
+import LinkCollection from "~/components/LinkCollection";
 
 const Home = () => {
   const [refetchFlag, setRefetchFlag] = useState(false);
@@ -25,6 +26,7 @@ const Home = () => {
       </div>
       <div className="hidden w-[30%] flex-col space-y-8 lg:flex ">
         <MissionCard />
+        <LinkCollection />
       </div>
     </div>
   );

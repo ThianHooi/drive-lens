@@ -17,6 +17,7 @@ import { Skeleton } from "~/components/ui/skeleton";
 import { env } from "~/env.mjs";
 import { MissionCard } from "./MissionCard";
 import LoginIcon from "~/components/icons/LoginIcon";
+import LinkCollection from "~/components/LinkCollection";
 
 const getNFtExplorerUrl = (contractAddress: string, nftId: string) => {
   const chain = getChainByChainId(Mumbai.chainId);
@@ -102,6 +103,7 @@ const AwardList = () => {
       </div>
       <div className="flex w-full flex-col space-y-8 lg:w-[30%] ">
         <MissionCard />
+        <LinkCollection />
       </div>
     </div>
   );
