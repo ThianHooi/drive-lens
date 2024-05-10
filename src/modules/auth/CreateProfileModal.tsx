@@ -20,24 +20,24 @@ const CreateProfileModal = () => {
 
   const [value, setValue] = useState<string | undefined>();
 
-  const onCreateHandler = async () => {
-    console.log("====================================");
-    console.log("Create profile with handle: ", value);
-    console.log("====================================");
+  // const onCreateHandler = async () => {
+  //   console.log("====================================");
+  //   console.log("Create profile with handle: ", value);
+  //   console.log("====================================");
 
-    if (!address) {
-      toast({
-        title: "Please connect your wallet",
-        description: "You need to connect your wallet to create a profile.",
-        variant: "destructive",
-      });
-      return;
-    }
+  //   if (!address) {
+  //     toast({
+  //       title: "Please connect your wallet",
+  //       description: "You need to connect your wallet to create a profile.",
+  //       variant: "destructive",
+  //     });
+  //     return;
+  //   }
 
-    const profileCreateResult = await lensClient.profile.create({
-      handle: value!,
-      to: address,
-    });
+    // const profileCreateResult = await lensClient.profile.create({
+    //   handle: value!,
+    //   to: address,
+    // });
 
     // const profileCreateResultValue = profileCreateResult.unwrap();
 
@@ -73,7 +73,7 @@ const CreateProfileModal = () => {
     // if (newProfile) {
     //   console.log(`The newly created profile's id is: ${newProfile.id}`);
     // }
-  };
+  // };
 
   return (
     <DialogContent className="max-w-3xl">
@@ -92,7 +92,10 @@ const CreateProfileModal = () => {
         />
       </div>
       <DialogFooter>
-        <Button onClick={onCreateHandler} variant="default">
+        <Button
+          onClick={() => console.log("Not implemented")}
+          variant="default"
+        >
           Create
         </Button>
       </DialogFooter>

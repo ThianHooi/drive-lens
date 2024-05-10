@@ -31,36 +31,36 @@ const CreateProfileDialog = ({
   const { toast } = useToast();
   const address = useAddress();
 
-  const createProfileHandler = async () => {
-    try {
-      const profileCreateResult = await lensClient.profile.create({
-        handle: handlerInput,
-        to: address!,
-      });
+  // const createProfileHandler = async () => {
+  //   try {
+  //     const profileCreateResult = await lensClient.profile.create({
+  //       handle: handlerInput,
+  //       to: address!,
+  //     });
 
-      if ("reason" in profileCreateResult) {
-        throw new Error(
-          profileCreateResult.reason ===
-          CreateProfileWithHandleErrorReasonType.HandleTaken
-            ? "Handle is taken"
-            : "Try again later",
-        );
-      }
+  //     if ("reason" in profileCreateResult) {
+  //       throw new Error(
+  //         profileCreateResult.reason ===
+  //         CreateProfileWithHandleErrorReasonType.HandleTaken
+  //           ? "Handle is taken"
+  //           : "Try again later",
+  //       );
+  //     }
 
-      await lensClient.transaction.waitUntilComplete({
-        forTxId: profileCreateResult.txId,
-      });
+  //     await lensClient.transaction.waitUntilComplete({
+  //       forTxId: profileCreateResult.txId,
+  //     });
 
-      onCreateProfileSuccess();
-    } catch (error) {
-      toast({
-        title: "Error",
-        description:
-          (error as { message?: string }).message ?? "Failed to create profile",
-        variant: "destructive",
-      });
-    }
-  };
+  //     onCreateProfileSuccess();
+  //   } catch (error) {
+  //     toast({
+  //       title: "Error",
+  //       description:
+  //         (error as { message?: string }).message ?? "Failed to create profile",
+  //       variant: "destructive",
+  //     });
+  //   }
+  // };
 
   const openChangeHandler = (open: boolean) => {
     if (!open) {
@@ -93,7 +93,7 @@ const CreateProfileDialog = ({
               Cancel
             </Button>
           </DialogClose>
-          <Button onClick={createProfileHandler} type="submit">
+          <Button onClick={() => console.log("Not implemented")} type="submit">
             Create
           </Button>
         </DialogFooter>
