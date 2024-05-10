@@ -12,7 +12,7 @@
     "start": "next start"
   },
   "dependencies": {
-    "@lens-protocol/client": "alpha",
+    "@lens-protocol/client": "^2.2.0",
     "@lens-protocol/metadata": "^1.0.5",
     "@lens-protocol/react-web": "^2.0.0-alpha.19",
     "@prisma/client": "^5.1.1",
