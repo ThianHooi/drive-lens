@@ -16,7 +16,7 @@ type Props = {
 };
 
 const PublicationActions = ({ publicationId, stats, operations }: Props) => {
-  const [likeCount, setLikeCount] = useState(stats.upvoteReactions ?? 0);
+  const [likeCount, setLikeCount] = useState<number>(stats?.upvotes ?? 0);
   const [hasUserLiked, setHasUserLiked] = useState(operations.hasUpvoted);
 
   const handleUpvote = async () => {
