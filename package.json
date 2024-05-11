@@ -35,6 +35,7 @@
     "@trpc/react-query": "^10.37.1",
     "@trpc/server": "^10.37.1",
     "@uiw/react-md-editor": "v3.25.6",
+    "ajv": "^7",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "ethers": "^5",
